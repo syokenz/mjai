@@ -43,13 +43,16 @@ module Mjai
                   escaped_names = (0...4).map(){ |i| elem["n%d" % i] }
                   return :broken if escaped_names.index(nil)  # Something is wrong.
                   @names = escaped_names.map(){ |s| URI.decode(s) }
+                  @dans = elem["dan"].split(/,/)
+                  @rates = elem["rate"].split(/,/)
                   return nil
                 when "TAIKYOKU"
                   oya = elem["oya"].to_i()
                   log_name = elem["log"] || File.basename(self.path, ".mjlog")
                   uri = "http://tenhou.net/0/?log=%s&tw=%d" % [log_name, (4 - oya) % 4]
                   @first_kyoku_started = false
-                  return do_action({:type => :start_game, :uri => uri, :names => @names})
+                  return do_action({:type => :start_game, :uri => uri, :names => @names,
+                                    :dans => @dans, :rates => @rates})
                 when "INIT"
                   if @first_kyoku_started
                     # Ends the previous kyoku. This is here because there can be multiple AGARIs in

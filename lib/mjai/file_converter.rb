@@ -31,14 +31,19 @@ module Mjai
         def dump_archive(archive_path, output_path, output_format)
           archive = Archive.load(archive_path)
           open(output_path, "w") do |f|
+            f.puts("{")
+            f.puts("\"log_id\":\"#{log_id(archive_path)}\",")
+            f.puts("\"body\":[")
             archive.on_action() do |action|
               if output_format == :human
                 archive.dump_action(action, f)
               else
-                f.puts(action.to_json())
+                f.print(action.to_json)
+                f.puts(",")
               end
             end
             archive.play()
+            f.puts("]}")
           end
         end
         
@@ -79,6 +84,10 @@ module Mjai
               exit(1)
             end
           end
+        end
+
+        def log_id(file_path)
+          file_path.split("/").last.split(".").first.split("&").first
         end
         
     end

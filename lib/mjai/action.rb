@@ -27,6 +27,8 @@ module Mjai
           [:tehais, :pais_list],
           [:uri, :string],
           [:names, :strings],
+          [:dans, :strings],
+          [:rates, :strings],
           [:hora_tehais, :pais],
           [:yakus, :yakus],
           [:fu, :number],
