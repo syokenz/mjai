@@ -34,12 +34,14 @@ module Mjai
             f.puts("{")
             f.puts("\"log_id\":\"#{log_id(archive_path)}\",")
             f.puts("\"body\":[")
+            is_first = true
             archive.on_action() do |action|
               if output_format == :human
                 archive.dump_action(action, f)
               else
+                f.puts(",") unless is_first
                 f.print(action.to_json)
-                f.puts(",")
+                is_first = false
               end
             end
             archive.play()
